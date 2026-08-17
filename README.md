@@ -328,7 +328,7 @@ Key test suites:
 
 ### Backend (`.env`)
 ```
-GROQ_API_KEY=gsk_...              # Get from https://console.groq.com
+GROQ_API_KEY=YOUR_GROQ_API_KEY             # Get from https://console.groq.com
 CHROMA_DB_PATH=./chroma_db        # Path to vector database
 EMBEDDING_MODEL=all-MiniLM-L6-v2  # HuggingFace model ID
 GROQ_MODEL=openai/gpt-oss-20b     # Supported Groq model name
