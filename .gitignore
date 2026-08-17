@@ -1,6 +1,12 @@
 ﻿# Dependencies
 node_modules/
 backend/.venv/
+backend/.env
+backend/.env.local
+backend/.env.*.local
+backend/__pycache__/
+backend/.pytest_cache/
+backend/chroma_db/
 venv/
 
 # Build outputs
