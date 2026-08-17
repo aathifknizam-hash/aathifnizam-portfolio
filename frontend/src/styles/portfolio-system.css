@@ -1,0 +1,329 @@
+/* Shared Visual System */
+
+/* Canvas and Vignette - All Pages */
+.network-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.network-vignette {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Make sure interactive project controls are strictly above the canvas and mask it visually. */
+.portfolio-page-shell .portfolio-back-button,
+.portfolio-page-shell .portfolio-related-card,
+.portfolio-page-shell .technology-stage-card,
+.portfolio-page-shell .technology-notes-card,
+.portfolio-page-shell .technology-project-card,
+.portfolio-page-shell button,
+.portfolio-page-shell textarea,
+.portfolio-page-shell input,
+.portfolio-page-shell .rounded-2xl {
+  position: relative;
+  z-index: 3; /* ensure controls are visually above vignette/canvas */
+}
+
+/* Slightly increase opacity of control backgrounds so the canvas doesn't visually bleed through translucent controls */
+.portfolio-page-shell .portfolio-back-button { background: rgba(18, 13, 29, 0.92); }
+.portfolio-page-shell .portfolio-related-card { background: linear-gradient(135deg, rgba(15, 11, 28, 0.94), rgba(9, 5, 18, 0.92)); }
+.portfolio-page-shell .technology-stage-card,
+.portfolio-page-shell .technology-notes-card,
+.portfolio-page-shell .technology-project-card { background: rgba(11, 8, 19, 0.92); }
+
+/* Inputs and textareas: maintain existing styling but slightly more opaque mask */
+.portfolio-page-shell textarea, .portfolio-page-shell input { background-color: rgba(13,9,20,0.9); }
+
+
+/* Variant-specific vignettes */
+.network-vignette[data-variant="landing"] {
+  /* lighten the vignette so page content remains bright above it */
+  background:
+    radial-gradient(ellipse 800px 400px at 50% 20%, rgba(107, 88, 255, 0.06), transparent 48%),
+    linear-gradient(180deg, rgba(5, 3, 8, 0.06) 0%, rgba(5, 3, 8, 0.28) 100%);
+}
+
+.network-vignette[data-variant="technology"] {
+  background:
+    radial-gradient(ellipse 900px 500px at 15% 10%, rgba(139, 92, 246, 0.1), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 90% 80%, rgba(236, 73, 153, 0.08), transparent 60%),
+    linear-gradient(180deg, rgba(8, 8, 13, 0.2) 0%, rgba(8, 8, 13, 0.55) 100%);
+}
+
+.network-vignette[data-variant="project"] {
+  background:
+    radial-gradient(ellipse 800px 450px at 20% 15%, rgba(120, 90, 255, 0.08), transparent 55%),
+    radial-gradient(ellipse 600px 400px at 85% 75%, rgba(220, 70, 140, 0.06), transparent 65%),
+    linear-gradient(180deg, rgba(8, 8, 13, 0.15) 0%, rgba(8, 8, 13, 0.5) 100%);
+}
+
+/* Page Shell - Scrollable Content Container */
+.portfolio-page-shell {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  min-height: 100vh;
+  background: transparent;
+  color: #f5f4fb;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.portfolio-page-main {
+  position: relative;
+  z-index: 2;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 90px 32px 120px;
+}
+
+/* Back Button - Shared Style */
+.portfolio-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 24px;
+  border: 1px solid rgba(200, 180, 255, 0.2);
+  background: rgba(18, 13, 29, 0.8);
+  color: #d6c9ff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  backdrop-filter: blur(8px);
+}
+
+.portfolio-back-button:hover {
+  border-color: #b592ff;
+  background: rgba(26, 21, 39, 0.8);
+  transform: translateY(-2px);
+}
+
+/* Eyebrow/Label */
+.portfolio-eyebrow {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: #c8b4ff;
+}
+
+/* Hero Section */
+.portfolio-hero {
+  margin-bottom: 60px;
+}
+
+.portfolio-hero-inner {
+  display: grid;
+  gap: 14px;
+}
+
+.portfolio-hero-inner h1 {
+  margin: 0;
+  font-size: clamp(2.4rem, 5vw, 4.3rem);
+  line-height: 0.96;
+  letter-spacing: -0.05em;
+  color: #f7f3ff;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+}
+
+.portfolio-description {
+  margin: 0;
+  max-width: 780px;
+  font-size: 1.08rem;
+  color: rgba(244, 240, 255, 0.78);
+  line-height: 1.7;
+}
+
+.portfolio-highlight {
+  margin: 0;
+  color: rgba(244, 240, 255, 0.6);
+  line-height: 1.6;
+}
+
+/* Section Title */
+.portfolio-section-title {
+  margin: 0 0 12px 0;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #f7f3ff;
+}
+
+.portfolio-section-subtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  color: rgba(244, 240, 255, 0.68);
+  line-height: 1.6;
+}
+
+/* Related Projects - New UI */
+.portfolio-related-section {
+  margin-top: 80px;
+  padding-top: 60px;
+  border-top: 1px solid rgba(200, 180, 255, 0.1);
+}
+
+.portfolio-related-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+  margin-top: 28px;
+}
+
+.portfolio-related-card {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  padding: 28px;
+  border-radius: 18px;
+  border: 1px solid rgba(200, 180, 255, 0.15);
+  background: linear-gradient(135deg, rgba(15, 11, 28, 0.8), rgba(9, 5, 18, 0.7));
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+}
+
+.portfolio-related-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(159, 106, 255, 0.1), transparent 45%);
+  pointer-events: none;
+}
+
+.portfolio-related-card:hover {
+  border-color: rgba(200, 180, 255, 0.35);
+  background: linear-gradient(135deg, rgba(20, 15, 35, 0.9), rgba(12, 8, 22, 0.8));
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(139, 92, 246, 0.15);
+}
+
+.portfolio-related-title {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #f7f3ff;
+  line-height: 1.3;
+}
+
+.portfolio-related-subtitle {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgba(244, 240, 255, 0.68);
+  line-height: 1.5;
+}
+
+.portfolio-related-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px 20px;
+  color: rgba(244, 240, 255, 0.5);
+}
+
+/* Page Transition Animation */
+@keyframes portfolio-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.portfolio-page-shell {
+  animation: portfolio-fade-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-back-button,
+  .portfolio-related-card {
+    transition: none;
+  }
+
+  .portfolio-page-shell {
+    animation: none;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .portfolio-page-main {
+    padding: 70px 24px 100px;
+  }
+
+  .portfolio-section-title {
+    font-size: clamp(1.2rem, 4vw, 1.8rem);
+  }
+
+  .portfolio-related-list {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .portfolio-page-main {
+    padding: 60px 16px 80px;
+  }
+
+  .portfolio-related-card {
+    padding: 20px;
+  }
+}
+
+/* Additional mobile breakpoint for very small phones */
+@media (max-width: 375px) {
+  .portfolio-page-main {
+    padding: 50px 12px 70px;
+  }
+
+  .portfolio-hero-inner h1 {
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+  }
+
+  .portfolio-description {
+    font-size: 0.95rem;
+  }
+
+  .portfolio-section-title {
+    font-size: clamp(1rem, 3.5vw, 1.6rem);
+  }
+
+  .portfolio-related-card {
+    padding: 16px;
+  }
+
+  .portfolio-related-title {
+    font-size: 1rem;
+  }
+
+  .portfolio-back-button {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+}
