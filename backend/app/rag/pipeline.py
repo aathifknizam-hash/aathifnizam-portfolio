@@ -1,4 +1,6 @@
-﻿import re
+﻿import gc
+import logging
+import re
 from pathlib import Path
 from typing import List, Optional
 
@@ -9,6 +11,8 @@ from .retriever import retrieve_chunks
 from .vectorstore import VectorStore
 from ..config import settings
 from ..ingestion.loaders import load_documents
+
+logger = logging.getLogger("uvicorn.error")
 
 PORTFOLIO_PROJECTS = [
     {"id": "rag-powered-helpdesk", "name": "Smart Service Desk", "aliases": ["smart service desk", "ssd", "smart-service-desk"]},
@@ -202,11 +206,25 @@ class RAGPipeline:
         self.recent_context: List[str] = []
 
     def initialize(self):
-        self.vectorstore = VectorStore(self.settings.chroma_db_path, self.settings.collection_name)
+        if self.vectorstore is not None and self.embedding_model is not None:
+            return
+
+        self.vectorstore = VectorStore(
+            self.settings.chroma_db_path,
+            self.settings.collection_name,
+            self.settings.embedding_model,
+        )
         self.embedding_model = EmbeddingModel(self.settings.embedding_model)
+
+        logger.info("Embedding backend: %s", self.embedding_model.backend_name)
+        logger.info("Embedding model: %s", self.embedding_model.model_name)
+        logger.info("Chroma collection: %s", self.vectorstore.collection_name)
+        logger.info("Chroma document count: %s", self.vectorstore.collection.count())
 
         if not self.vectorstore.has_documents():
             self.build_index()
+
+        logger.info("Chroma document count: %s", self.vectorstore.collection.count())
 
     def build_index(self):
         knowledge_path = Path(__file__).resolve().parents[2] / "knowledge_base"
@@ -245,6 +263,8 @@ class RAGPipeline:
             metadatas=[item["metadata"] for item in chunks],
             embeddings=embeddings,
         )
+        del embeddings, chunks
+        gc.collect()
 
     def _recent_entity(self, question: str) -> Optional[str]:
         lowered = question.lower()
@@ -320,7 +340,11 @@ class RAGPipeline:
         return "Hi! I'm Aathif's portfolio assistant. Ask me about his projects, skills, technologies, or experience."
 
     async def answer_chat(self, question: str):
-        assert self.vectorstore is not None and self.embedding_model is not None
+        # Ensure pipeline is initialized (in case startup event didn't run or was skipped)
+        if self.vectorstore is None or self.embedding_model is None:
+            logger.warning("RAG pipeline not initialized; initializing now on first request")
+            self.initialize()
+        
         clean_question = normalize_space(question)
         lowered = clean_question.lower()
         intent = classify_intent(clean_question)

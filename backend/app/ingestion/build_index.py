@@ -1,4 +1,5 @@
-﻿from pathlib import Path
+﻿import gc
+from pathlib import Path
 
 from .loaders import load_documents
 from ..rag.chunking import split_text
@@ -13,7 +14,7 @@ def build_index() -> None:
     if not documents:
         return
 
-    vectorstore = VectorStore(settings.chroma_db_path, settings.collection_name)
+    vectorstore = VectorStore(settings.chroma_db_path, settings.collection_name, settings.embedding_model)
     model = EmbeddingModel(settings.embedding_model)
 
     chunks = []
@@ -49,6 +50,8 @@ def build_index() -> None:
         metadatas=[item["metadata"] for item in chunks],
         embeddings=embeddings,
     )
+    del embeddings, chunks, model, vectorstore
+    gc.collect()
 
 
 if __name__ == "__main__":

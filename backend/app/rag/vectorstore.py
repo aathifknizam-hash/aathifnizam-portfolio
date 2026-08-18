@@ -1,11 +1,11 @@
 ﻿from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import chromadb
 
 
 class VectorStore:
-    def __init__(self, persist_path: Path, collection_name: str):
+    def __init__(self, persist_path: Path, collection_name: str, embedding_model: Optional[str] = None):
         self.persist_path = Path(persist_path)
         self.persist_path.mkdir(parents=True, exist_ok=True)
 
@@ -15,24 +15,33 @@ class VectorStore:
             self.client = chromadb.Client()
 
         self.collection_name = collection_name
+        self.embedding_model = embedding_model
         self.collection = self._load_or_create_collection()
 
     def _load_or_create_collection(self):
         import sqlite3
         try:
-            return self.client.get_collection(name=self.collection_name)
+            collection = self.client.get_collection(name=self.collection_name)
+            if self.embedding_model is not None:
+                metadata = getattr(collection, "metadata", None) or {}
+                if metadata.get("embedding_model") and metadata.get("embedding_model") != self.embedding_model:
+                    self.reset_collection()
+                    return self.collection
+            return collection
         except sqlite3.OperationalError as op_err:
-            # Persistent client DB schema may be incompatible with this chromadb version
-            # Fall back to an in-memory client to avoid crashes caused by old/stale DB files.
             try:
-                # create a fresh in-memory client
                 self.client = chromadb.Client()
-                return self.client.get_or_create_collection(name=self.collection_name)
+                return self.client.get_or_create_collection(
+                    name=self.collection_name,
+                    metadata={"embedding_model": self.embedding_model or "unknown", "embedding_backend": "FastEmbed"},
+                )
             except Exception:
-                # As a last resort, re-raise the original error for visibility
                 raise op_err
         except Exception:
-            return self.client.get_or_create_collection(name=self.collection_name)
+            return self.client.get_or_create_collection(
+                name=self.collection_name,
+                metadata={"embedding_model": self.embedding_model or "unknown", "embedding_backend": "FastEmbed"},
+            )
 
     def has_documents(self) -> bool:
         try:
@@ -45,7 +54,10 @@ class VectorStore:
             self.client.delete_collection(name=self.collection_name)
         except Exception:
             pass
-        self.collection = self.client.get_or_create_collection(name=self.collection_name)
+        self.collection = self.client.get_or_create_collection(
+            name=self.collection_name,
+            metadata={"embedding_model": self.embedding_model or "unknown", "embedding_backend": "FastEmbed"},
+        )
 
     def add_documents(
         self,
