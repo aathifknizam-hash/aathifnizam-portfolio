@@ -1210,6 +1210,28 @@ a{ color:inherit; }
   }
 }
 
+@media (max-width:768px){
+  .skills{
+    border-top:1px solid rgba(182,170,255,.12);
+  }
+
+  .skills::before{
+    inset:0 0 auto;
+    width:100%;
+    height:120px;
+    border:0;
+    border-radius:0;
+    transform:none;
+    background:linear-gradient(180deg, rgba(122,77,232,.12), transparent 78%);
+    opacity:.7;
+  }
+
+  .skills:not(.visible) .skills-head{
+    opacity:.22;
+    transform:translateY(8px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce){
   /* Remove large spotlight/ring in skills (user-requested): hide the decorative ::before/::after and the skills-water spotlight */
   .skills::before,
