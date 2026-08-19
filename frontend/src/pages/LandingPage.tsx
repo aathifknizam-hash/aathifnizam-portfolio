@@ -1,4 +1,4 @@
-﻿import { CSSProperties, FormEvent, useEffect, useMemo, useRef, useState } from 'react'
+﻿import { CSSProperties, FormEvent, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useChat } from '../hooks/useChat'
 import SkillGrid from '../components/skills/SkillGrid'
@@ -50,10 +50,6 @@ const faqItems: FaqItem[] = [
     display: 'thinking about what to ask? here are the FAQs…',
   },
   {
-    query: 'what is rag?',
-    display: 'what is RAG?',
-  },
-  {
     query: 'what is your process for building products?',
     display: 'what is your process for building products?',
   },
@@ -91,11 +87,36 @@ function LandingPage() {
   const skillsRef = useRef<HTMLElement | null>(null)
   const skillsPointerFrameRef = useRef<number | null>(null)
   const panelRef = useRef<HTMLDivElement | null>(null)
+  const faqRef = useRef<HTMLButtonElement | null>(null)
+  const faqTextRef = useRef<HTMLSpanElement | null>(null)
   const pendingQuestionRef = useRef<string | undefined>(undefined)
+  const [faqHeight, setFaqHeight] = useState<number | null>(null)
 
   const faqItem = faqItems[faqIndex]
   const currentConnectStage = connectStages[Math.min(connectStepIndex, connectStages.length - 1)]
   const skillGridItems = useMemo(() => skillItems, [])
+
+  useLayoutEffect(() => {
+    const faqButton = faqRef.current
+    const faqText = faqTextRef.current
+    if (!faqButton || !faqText) {
+      return
+    }
+
+    const updateFaqHeight = () => {
+      const buttonStyle = getComputedStyle(faqButton)
+      const verticalPadding = parseFloat(buttonStyle.paddingTop) + parseFloat(buttonStyle.paddingBottom)
+      const verticalBorder = parseFloat(buttonStyle.borderTopWidth) + parseFloat(buttonStyle.borderBottomWidth)
+      const minimumHeight = parseFloat(buttonStyle.minHeight) || 0
+      const contentHeight = faqText.getBoundingClientRect().height + verticalPadding + verticalBorder
+      setFaqHeight(Math.max(minimumHeight, contentHeight))
+    }
+
+    updateFaqHeight()
+    const observer = new ResizeObserver(updateFaqHeight)
+    observer.observe(faqText)
+    return () => observer.disconnect()
+  }, [faqItem.display])
 
   useEffect(() => {
     const heroSection = document.querySelector('.hero')
@@ -349,12 +370,14 @@ function LandingPage() {
                 type="button"
                 className="bubble chip chip-faded"
                 id="faqChip"
+                ref={faqRef}
+                style={faqHeight === null ? undefined : { height: `${faqHeight}px` }}
                 data-question={faqItem.query}
                 onClick={(event) => openChat(faqItem.query, false, event.currentTarget)}
                 onMouseEnter={() => setFaqPaused(true)}
                 onMouseLeave={() => setFaqPaused(false)}
               >
-                <span className={`faq-text${faqSwap ? ' swap' : ''}`}>{faqItem.display}</span>
+                <span ref={faqTextRef} className={`faq-text${faqSwap ? ' swap' : ''}`}>{faqItem.display}</span>
               </button>
               <span className="dline" />
               <button
