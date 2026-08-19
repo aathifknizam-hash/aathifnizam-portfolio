@@ -110,7 +110,7 @@ a{ color:inherit; }
   text-align:center;
   font-family:var(--font-display);
   font-weight:900;
-  font-size:clamp(64px, 15vw, 200px);
+  font-size:clamp(56px, 12vw, 160px);
   line-height:.9;
   letter-spacing:0.02em;
   color: rgba(255,255,255,0.08);
@@ -345,13 +345,13 @@ a{ color:inherit; }
   #faqChip{ display:none; }
 
   .hero-name{
-    top:1.5%;
+    top:2%;
     left:50%;
-    width:100%;
-    padding:0 10px;
+    width:calc(100% - 32px);
+    padding:0;
     white-space:nowrap;
-    font-size:clamp(42px, 18vw, 96px);
-    letter-spacing:0.04em;
+    font-size:clamp(30px, 10vw, 52px);
+    letter-spacing:0.02em;
   }
   .chain-row.row-start .dline:first-child{ display:none; }
   .chain-row.row-center .dline{ display:none; }

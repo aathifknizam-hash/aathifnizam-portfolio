@@ -276,6 +276,11 @@
     padding: 70px 24px 100px;
   }
 
+  .portfolio-page-main > div[style*="grid-template-columns"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 28px !important;
+  }
+
   .portfolio-section-title {
     font-size: clamp(1.2rem, 4vw, 1.8rem);
   }
