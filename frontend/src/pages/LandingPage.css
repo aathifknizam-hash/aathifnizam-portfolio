@@ -369,9 +369,7 @@ a{ color:inherit; }
   --skills-ripple-y: 50%;
   --skills-ripple-active: 0;
   position:relative;
-  background:
-    radial-gradient(circle at 68% 24%, rgba(122, 77, 232, 0.14), transparent 22%),
-    linear-gradient(180deg, #050308 0%, #090711 100%);
+  background:linear-gradient(180deg, #050308 0%, #090711 100%);
   padding:clamp(70px,10vw,120px) clamp(20px,6vw,64px) clamp(90px,10vw,130px);
   overflow:hidden;
   isolation:isolate;
@@ -405,6 +403,15 @@ a{ color:inherit; }
 .skills-water::after {
   inset:24% 28%;
   border-color: rgba(120, 170, 255, 0.08);
+}
+
+.skills-wave-stack,
+.skills::before,
+.skills::after,
+.skills-orbit,
+.skills-water::before,
+.skills-water::after{
+  display:none;
 }
 
 .skills-wave-stack {
@@ -1209,23 +1216,8 @@ a{ color:inherit; }
     border-top:0;
   }
 
-  .skills-wave-stack,
-  .skills::before{
-    display:none;
-  }
-
-  .skills::after,
-  .skills-orbit{
-    display:none;
-  }
-
   .skills-water{
     opacity:.02;
-  }
-
-  .skills-water::before,
-  .skills-water::after{
-    display:none;
   }
 
   .skills:not(.visible) .skills-head{
