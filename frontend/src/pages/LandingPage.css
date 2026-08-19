@@ -24,7 +24,7 @@
 }
 
 *{ box-sizing:border-box; }
-html{ scroll-behavior:smooth; }
+html{ scroll-behavior:auto !important; }
 body{ margin:0; font-family:var(--font-body); }
 img,svg{ display:block; max-width:100%; }
 button{ font-family:inherit; cursor:pointer; }
@@ -35,7 +35,8 @@ a{ color:inherit; }
 .landing-page {
   position: relative;
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
+  overflow-y: visible;
   background: #050308;
 }
 
@@ -70,13 +71,12 @@ a{ color:inherit; }
 /* ===================== HERO ===================== */
 .hero{
   position:relative;
-  min-height:100vh;
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
   text-align:center;
-  padding: clamp(90px, 12vw, 140px) 24px 150px;
+  padding: clamp(70px, 9vw, 110px) 24px 150px;
   background: transparent;
   overflow:hidden;
   transition:opacity .8s var(--ease), transform .8s var(--ease), filter .8s var(--ease);
@@ -1152,7 +1152,7 @@ a{ color:inherit; }
   
   /* Mobile-specific text and spacing adjustments */
   .hero{
-    padding: clamp(70px, 8vw, 140px) 16px 100px;
+    padding: clamp(54px, 7vw, 96px) 16px 80px;
   }
   
   .hero-tag{
@@ -1178,7 +1178,7 @@ a{ color:inherit; }
 /* Additional mobile breakpoint for very small phones */
 @media (max-width:375px){
   .hero{
-    padding: 60px 12px 90px;
+    padding: 48px 12px 72px;
   }
   
   .bubble-lg, .bubble-cta{
