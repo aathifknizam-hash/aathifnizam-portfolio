@@ -760,12 +760,6 @@ a{ color:inherit; }
 @media (max-width:520px){
   .skills-grid{ grid-template-columns:1fr; gap:14px; }
   .skills-grid .skill-card { min-width:0; }
-  .skills-orbit {
-    right: 10px;
-    width: min(220px, 48vw);
-    height: min(180px, 42vw);
-    opacity: 0.14;
-  }
 }
 
 /* ===================== CTA / FOOTER ===================== */
@@ -1212,22 +1206,30 @@ a{ color:inherit; }
 
 @media (max-width:768px){
   .skills{
-    border-top:1px solid rgba(182,170,255,.12);
+    border-top:0;
   }
 
+  .skills-wave-stack,
   .skills::before{
-    inset:0 0 auto;
-    width:100%;
-    height:120px;
-    border:0;
-    border-radius:0;
-    transform:none;
-    background:linear-gradient(180deg, rgba(122,77,232,.12), transparent 78%);
-    opacity:.7;
+    display:none;
+  }
+
+  .skills::after,
+  .skills-orbit{
+    display:none;
+  }
+
+  .skills-water{
+    opacity:.02;
+  }
+
+  .skills-water::before,
+  .skills-water::after{
+    display:none;
   }
 
   .skills:not(.visible) .skills-head{
-    opacity:.22;
+    opacity:.52;
     transform:translateY(8px);
   }
 }
